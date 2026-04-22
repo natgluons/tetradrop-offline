@@ -41,18 +41,18 @@
         <div id="main-area">
             <!-- Left Side Panel -->
             <div id="left-panel">
-                <div id="hold-container" class="side-panel">
+                <div id="hold-container" class="side-panel hold-button" onclick="playerHold()" role="button" tabindex="0" aria-label="Hold current piece">
                     <div class="panel-label">HOLD</div>
                     <canvas id="hold-canvas" width="100" height="80"></canvas>
-                </div>
-                <div class="side-panel quick-controls">
-                    <button id="quick-hold" class="quick-btn" onclick="playerHold()">H</button>
-                    <button id="quick-pause" class="quick-btn" onclick="togglePause()">⏸</button>
                 </div>
             </div>
 
             <!-- Game Canvas -->
             <div id="canvas-container">
+                <div id="top-controls">
+                    <button id="pause-btn" class="top-btn" onclick="togglePause()">PAUSE</button>
+                    <button id="settings-btn" class="top-btn" onclick="toggleSettings()">SETTINGS</button>
+                </div>
                 <canvas id="game-canvas" tabindex="0"></canvas>
                 <div id="game-overlay" class="hidden">
                     <div id="overlay-content">
@@ -75,9 +75,6 @@
                 <div id="next-container" class="side-panel">
                     <div class="panel-label">NEXT</div>
                     <canvas id="next-canvas" width="100" height="80"></canvas>
-                </div>
-                <div id="settings-toggle" class="side-panel" onclick="toggleSettings()" title="Settings" aria-label="Settings">
-                    <div class="panel-label">⚙️</div>
                 </div>
             </div>
         </div>
@@ -129,7 +126,7 @@
                             <span class="desc">Drop</span>
                         </div>
                         <div class="control-item">
-                            <span class="key">H</span>
+                            <span class="key">C</span>
                             <span class="desc">Hold piece</span>
                         </div>
                         <div class="control-item">
