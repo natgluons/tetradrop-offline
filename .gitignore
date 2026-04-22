@@ -3,13 +3,30 @@ node_modules/
 
 # Build outputs
 www/
-android/app/src/main/assets/www/
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
 
 # Android build files
 android/.gradle/
 android/app/build/
 android/.cxx/
 android/local.properties
+android/gradle-*.zip
+
+# Generated Gradle wrapper files
+android/gradle/wrapper/gradle-wrapper.jar
+
+# Editor and OS files
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Logs and transient files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
 
 # IDE files
 .idea/
