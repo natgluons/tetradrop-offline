@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const rootDir = path.resolve(__dirname);
-const destDir = path.join(rootDir, 'android', 'app', 'src', 'main', 'assets', 'www');
+const destDir = path.join(rootDir, 'www');
 const itemsToCopy = [
   'index.html',
   'manifest.json',
@@ -24,9 +24,10 @@ function copyRecursive(src, dest) {
   }
 }
 
-if (!fs.existsSync(destDir)) {
-  fs.mkdirSync(destDir, { recursive: true });
+if (fs.existsSync(destDir)) {
+  fs.rmSync(destDir, { recursive: true, force: true });
 }
+fs.mkdirSync(destDir, { recursive: true });
 
 for (const item of itemsToCopy) {
   const srcPath = path.join(rootDir, item);
@@ -38,5 +39,5 @@ for (const item of itemsToCopy) {
   copyRecursive(srcPath, destPath);
 }
 
-console.log('Web assets copied into APK wrapper:', destDir);
-console.log('Open android/ in Android Studio and build the app after copying assets.');
+console.log('Web assets copied into build directory:', destDir);
+console.log('Now run `npx cap sync android` and open the Android project in Android Studio.');

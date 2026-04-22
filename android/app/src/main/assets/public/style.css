@@ -29,7 +29,7 @@ body {
     max-width: 500px;
     height: 100%;
     max-height: 100dvh;
-    padding: 5px 5px 16px;
+    padding: 5px;
 }
 
 /* Top Bar */
@@ -96,15 +96,6 @@ body {
     width: 80px;
 }
 
-#center-panel {
-    width: 110px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-}
-
 #right-panel {
     width: 100px;
 }
@@ -160,82 +151,7 @@ body {
     display: block;
     margin: 0 auto;
 }
-
-#top-controls {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px; /* Slightly more gap looks better when floating */
-    padding: 0; /* Remove padding since the container is transparent */
-    
-    /* Make the container invisible */
-    background: transparent !important; 
-    border: none !important;
-    
-    /* Remove any glow effects */
-    box-shadow: none !important;
-    filter: none !important;
-    z-index: 20;
-}
-
-.top-btn {
-    min-width: 70px;
-    padding: 8px 12px;
-    border-radius: 12px;
-    background: #2a2a2a; /* Solid dark grey for the buttons */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    cursor: pointer;
-    
-    /* Ensure the buttons themselves don't have a shadow */
-    box-shadow: none !important;
-    transition: transform 0.1s, background-color 0.1s;
-}
-
-.top-btn:active {
-    transform: scale(0.95);
-    background: #333333;
-}
-
-#hold-container.hold-button {
-    cursor: pointer;
-}
-
-#hold-container.hold-button:active {
-    transform: translateY(1px);
-}
-
-.middle-controls {
-    padding: 10px 8px;
-}
-
-.middle-btn {
-    width: 100%;
-    min-width: 90px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #fff;
-    font-size: 12px;
-    padding: 10px 8px;
-    cursor: pointer;
-    transition: transform 0.15s, background 0.15s, border-color 0.15s;
-}
-
-.middle-btn:hover,
-.middle-btn:focus {
-    background: rgba(255, 255, 255, 0.12);
-}
-
-.middle-btn:active {
-    transform: scale(0.96);
-}
-
+/* Floating mobile control overlays */
 #left-panel,
 #right-panel {
     transition: all 0.2s ease;
@@ -331,9 +247,7 @@ body {
 
     #game-canvas {
         max-height: calc(100vh - 180px);
-        max-width: calc(100vw - 16px);
-        width: 100%;
-        height: auto;
+        width: calc(100vw - 16px);
     }
 }
 
@@ -352,10 +266,8 @@ body {
     border-radius: 5px;
     border: 2px solid rgba(255, 255, 255, 0.1);
     image-rendering: pixelated;
-    image-rendering: -webkit-optimize-contrast;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 10 / 20;
+    max-height: 100%;
+    max-width: 100%;
     touch-action: none;
 }
 

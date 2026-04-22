@@ -1,0 +1,22 @@
+# Node dependencies
+node_modules/
+
+# Build outputs
+www/
+android/app/src/main/assets/www/
+
+# Android build files
+android/.gradle/
+android/app/build/
+android/.cxx/
+android/local.properties
+
+# IDE files
+.idea/
+*.iml
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

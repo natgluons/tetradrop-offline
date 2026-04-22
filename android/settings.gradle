@@ -1,2 +1,9 @@
 rootProject.name = 'tetris_mobile_apk'
 include ':app'
+
+// This is the part that is likely missing or has a wrong path
+include ':capacitor-android'
+project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
+
+// If you have other plugins, they usually appear below this
+apply from: 'capacitor.settings.gradle'
