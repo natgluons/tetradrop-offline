@@ -1,0 +1,2 @@
+rootProject.name = 'tetris_mobile_apk'
+include ':app'
