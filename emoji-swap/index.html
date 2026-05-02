@@ -128,11 +128,31 @@
         .home-link:hover {
             color: white;
         }
+
+        @media (max-width: 640px) {
+            .game-grid {
+                gap: 0.75rem;
+            }
+            
+            .emoji-card {
+                height: 80px;
+                font-size: 48px;
+            }
+            
+            .stats {
+                gap: 1rem;
+                font-size: 1rem;
+            }
+            
+            .stat {
+                padding: 0.75rem 1rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔀 Emoji Swap Game</h1>
+        <h1>Emoji Swap Game</h1>
         <p class="description">Click emojis to select and swap them. Get all 4 in the correct hidden order!</p>
 
         <div class="stats">
