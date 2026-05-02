@@ -1022,8 +1022,6 @@ canvas.addEventListener('touchend', (e) => {
                 playerHold();
             }
         }
-            }
-        }
     }
 }, { passive: false });
 
