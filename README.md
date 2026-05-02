@@ -13,12 +13,12 @@ Offline PWA games collection that works without internet. All games run directly
 
 ## Features
 
-- ✅ 100% offline support
-- ✅ Installable as PWA
-- ✅ Responsive design works on mobile and desktop
-- ✅ No ads, no tracking
-- ✅ No dependencies required
-- ✅ All games are self-contained
+- 100% offline support
+- Installable as PWA
+- Responsive design works on mobile and desktop
+- No ads, no tracking
+- No dependencies required
+- All games are self-contained
 
 ## How to Play
 
