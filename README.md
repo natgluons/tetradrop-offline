@@ -1,46 +1,37 @@
-# TetraDrop Offline
+# 🎮 Pocket Games
 
-A modified classical block game for your phone featuring a minimalist UI designed for immediate play. Jump straight into the action with zero distractions and fully adjustable gameplay settings including speed, game modes, and many more.
+Offline PWA games collection that works without internet. All games run directly in your browser.
 
------
+## 🎯 Available Games
 
-## Get the Game
+| Game | Description |
+|------|-------------|
+| 🧱 **Tetra Drop** | Classic falling block puzzle game. Clear lines and get high score! |
+| 🦫 **Capy Cat** | Virtual pet simulator. Take care of your capybara - feed, pet and play! |
+| 🔀 **Emoji Swap** | Logic puzzle game. Swap emojis to find the secret hidden order. |
+| 💧 **Water Sort** | Color sorting puzzle. Pour liquids between tubes to sort all colors. |
 
-You can download the latest version of the app directly from the **[Releases](https://github.com/natgluons/tetradrop-offline/releases/tag/v1.1.0)** page.
+## ✨ Features
 
-1.  Download the **APK** file.
-2.  Open it on your Android phone.
-3.  If your phone asks, allow it to "Install from Unknown Sources."
-4.  Open the app and start playing instantly.
+- ✅ 100% offline support
+- ✅ Installable as PWA
+- ✅ Responsive design works on mobile and desktop
+- ✅ No ads, no tracking
+- ✅ No dependencies required
+- ✅ All games are self-contained
 
------
+## 🚀 How to Play
 
-## Why this version?
+Just open `index.html` in any modern browser.
 
-  * **No Waiting:** There is no home screen or loading screen. When you open the app, you are in the game.
-  * **More Room to Play:** The game uses a **larger screen layout** so you can see the blocks clearly.
-  * **Zero Distractions:** No ads, no pop-ups, and no internet needed. It works **100% offline**.
-  * **Clean Design:** A minimalist look that is easy on the eyes and keeps you focused on the blocks.
+## 📱 Mobile Support
 
------
+All games are optimized for mobile touch controls. Add to home screen for best experience.
 
-## Customize Your Game
+## 🛠️ Development
 
-You have full control over how you want to play. In the **Settings**, you can change:
+All games are built with pure HTML, CSS and JavaScript. No build tools required.
 
-  * **Difficulty:** Make the game as easy or as hard as you like.
-  * **Game Modes:** Choose between **Marathon** (play as long as you can) or **Sprint** (reach a goal as fast as you can).
-  * **Block Numbers:** Change how many blocks you have to deal with.
-  * **Speed:** Control how fast the blocks fall to match your skill level.
-  * **Quick UI:** The buttons and menus are fast and stay out of your way.
+---
 
------
-
-## For Developers
-
-If you want to see how this was made:
-
-1.  **Clone the project** to your computer.
-2.  Run `npm install` to get the files ready.
-3.  Use `npm run build` and `npx cap sync android` to move the code to the mobile folder.
-4.  Open the project in **Android Studio** to build your own APK.
+*Offline PWA Games Collection • Works without internet*
