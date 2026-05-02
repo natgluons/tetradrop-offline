@@ -98,6 +98,7 @@ let gameState = {
     wasPausedBeforeSettings: false,
     holdEnabled: true,
     speedLevel: 5,
+    progressiveSpeed: true,
     bag: []
 };
 
@@ -603,7 +604,10 @@ function checkSprintPieces() {
 
 function updateDropInterval() {
     // Base interval decreases with level, modified by speed setting
-    const baseInterval = Math.max(50, 1000 - (gameState.level - 1) * 80);
+    let baseInterval = 1000;
+    if (gameState.progressiveSpeed) {
+        baseInterval = Math.max(50, 1000 - (gameState.level - 1) * 80);
+    }
     const speedMultiplier = 1.2 - (gameState.speedLevel * 0.02);
     gameState.dropInterval = Math.max(30, Math.floor(baseInterval * speedMultiplier));
 }
@@ -720,6 +724,7 @@ function startGame() {
     // Get settings from popup
     gameState.holdEnabled = document.getElementById('hold-toggle').checked;
     gameState.speedLevel = parseInt(document.getElementById('speed-slider').value);
+    gameState.progressiveSpeed = document.getElementById('progressive-speed-toggle').checked;
     gameState.sprintLines = parseInt(document.getElementById('sprint-lines').value) || 5;
     gameState.sprintPieces = parseInt(document.getElementById('sprint-pieces').value) || 40;
     gameState.piecesCounter = 0;
@@ -809,6 +814,7 @@ function applySettings() {
     // Get settings values
     gameState.holdEnabled = document.getElementById('hold-toggle').checked;
     gameState.speedLevel = parseInt(document.getElementById('speed-slider').value);
+    gameState.progressiveSpeed = document.getElementById('progressive-speed-toggle').checked;
     gameState.sprintLines = parseInt(document.getElementById('sprint-lines').value) || 5;
     gameState.sprintPieces = parseInt(document.getElementById('sprint-pieces').value) || 40;
     gameState.piecesCounter = 0;
@@ -957,6 +963,8 @@ document.getElementById('speed-slider').addEventListener('input', (e) => {
 let touchStartX = 0;
 let touchStartY = 0;
 let touchStartTime = 0;
+let swipePreviewOffset = 0;
+let isSwiping = false;
 
 canvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
@@ -1009,8 +1017,12 @@ canvas.addEventListener('touchend', (e) => {
                 updateScore();
             }
         } else if (deltaY < -SWIPE_THRESHOLD) {
-            // Up swipe - rotate
-            playerRotate(1);
+            // Up swipe - hold piece (all up swipes = hold)
+            if (gameState.holdEnabled && gameState.canHold) {
+                playerHold();
+            }
+        }
+            }
         }
     }
 }, { passive: false });
