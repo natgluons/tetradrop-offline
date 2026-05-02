@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>TetraDrop Offline</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" type="image/png" href="icons/icon-512.png" />
+    <link rel="apple-touch-icon" href="icons/icon-512.png" />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+        // Register service worker for PWA offline support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js').catch(() => {});
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Top UI Bar -->
+        <div id="top-bar">
+            <div id="score-display">
+                <div class="score-label">SCORE</div>
+                <div class="score-value" id="score">0</div>
+            </div>
+            <div id="mode-display">
+                <div class="score-label" id="mode-label">MARATHON</div>
+                <div class="score-value" id="lines-display">LINES: 0</div>
+            </div>
+            <div id="best-display">
+                <div class="score-label">BEST</div>
+                <div class="score-value" id="best">0</div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div id="main-area">
+            <!-- Left Side Panel -->
+            <div id="left-panel">
+                <div id="hold-container" class="side-panel hold-button" onclick="playerHold()" role="button" tabindex="0" aria-label="Hold current piece">
+                    <div class="panel-label">HOLD</div>
+                    <canvas id="hold-canvas" width="100" height="80"></canvas>
+                </div>
+            </div>
+
+            <!-- Game Canvas -->
+            <div id="canvas-container">
+                <div id="top-controls">
+                    <button id="pause-btn" class="top-btn" onclick="togglePause()">PAUSE</button>
+                    <button id="settings-btn" class="top-btn" onclick="toggleSettings()">SETTINGS</button>
+                </div>
+                <canvas id="game-canvas" tabindex="0"></canvas>
+                <div id="game-overlay" class="hidden">
+                    <div id="overlay-content">
+                        <h2 id="overlay-title">GAME OVER</h2>
+                        <p id="overlay-message">Final Score: 0</p>
+                        <button id="restart-btn">PLAY AGAIN</button>
+                        <button id="resume-btn" class="hidden">CONTINUE</button>
+                    </div>
+                </div>
+                <div id="start-overlay">
+                    <div id="start-content">
+                        <h2>TETRADROP OFFLINE</h2>
+                        <button id="start-btn">START GAME</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side Panel -->
+            <div id="right-panel">
+                <div id="next-container" class="side-panel">
+                    <div class="panel-label">NEXT</div>
+                    <canvas id="next-canvas" width="100" height="80"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Popup -->
+        <div id="settings-popup" class="hidden">
+            <div id="settings-popup-content">
+                <div class="popup-header">
+                    <h3>SETTINGS</h3>
+                    <button id="close-settings" onclick="toggleSettings()">✕</button>
+                </div>
+                <div class="setting-row">
+                    <label for="hold-toggle">Hold Piece</label>
+                    <input type="checkbox" id="hold-toggle" checked />
+                </div>
+                 <div class="setting-row">
+                     <label for="speed-slider">Speed</label>
+                     <input type="range" id="speed-slider" min="1" max="10" value="5" />
+                     <span id="speed-value">5</span>
+                 </div>
+                 <div class="setting-row">
+                     <label for="progressive-speed-toggle">Increase speed over time</label>
+                     <input type="checkbox" id="progressive-speed-toggle" checked />
+                 </div>
+                <div class="setting-row">
+                    <label>Mode</label>
+                    <div class="toggle-container">
+                        <button id="mode-marathon" class="mode-btn active" onclick="setMode('Marathon')">Marathon</button>
+                        <button id="mode-sprint" class="mode-btn" onclick="setMode('Sprint')">Sprint</button>
+                    </div>
+                </div>
+                <div id="sprint-settings" class="hidden">
+                    <div class="setting-row">
+                        <label for="sprint-lines">Target Lines</label>
+                        <input type="number" id="sprint-lines" min="1" max="150" value="5" />
+                    </div>
+                    <div class="setting-row">
+                        <label for="sprint-pieces">Piece Limit</label>
+                        <input type="number" id="sprint-pieces" min="1" max="500" value="40" />
+                    </div>
+                </div>
+                
+                <!-- How to Play Section -->
+                <div class="how-to-play">
+                    <h4>HOW TO PLAY</h4>
+                    <div class="controls-list">
+                        <div class="control-item">
+                            <span class="key">← →</span>
+                            <span class="desc">Move left/right</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">↓</span>
+                            <span class="desc">Drop</span>
+                        </div>
+                         <div class="control-item">
+                             <span class="key">C / Swipe Up</span>
+                             <span class="desc">Hold piece</span>
+                         </div>
+                        <div class="control-item">
+                            <span class="key">Mouse click</span>
+                            <span class="desc">Rotate piece</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">P</span>
+                            <span class="desc">Pause game</span>
+                        </div>
+                    </div>
+                    <p class="hint">Or you can also use WASD or if you're using mobile app, swipe and tap on the game area.</p>
+                </div>
+                
+                <button id="apply-settings" onclick="applySettings()">APPLY & RESTART</button>
+            </div>
+        </div>
+
+        <!-- Touch Controls (hidden by default, shown via settings) -->
+        <div id="controls" class="hidden">
+            <div id="left-controls">
+                <button id="btn-left" class="control-btn">◀</button>
+                <button id="btn-right" class="control-btn">▶</button>
+            </div>
+            <div id="center-controls">
+                <button id="btn-rotate" class="control-btn rotate-btn">↻</button>
+                <button id="btn-hard-drop" class="control-btn hard-drop-btn">⏬</button>
+            </div>
+            <div id="right-controls">
+                <button id="btn-hold" class="control-btn hold-btn">H</button>
+                <button id="btn-pause" class="control-btn pause-btn">⏸</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
