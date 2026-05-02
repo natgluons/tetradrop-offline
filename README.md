@@ -22,9 +22,10 @@ Offline PWA games collection that works without internet. All games run directly
 
 ## 🚀 How to Play
 
-- **Web**: Clone the repository and launch index.html in your browser to start playing.
-- **PWA**: Add to home screen for native app experience
-- **Android**: Download APK from **releases page**
+- **Web**: Click here to play: https://natgluons.github.io/pocket-games/.
+- **Local**: Clone the repository and launch index.html in your browser to start playing.
+- **PWA**: Add to home screen for native app experience.
+- **Android**: Download APK from **[releases page](https://github.com/natgluons/pocket-games/releases/tag/v1.1.0)**.
 
 ## 📱 Mobile Support
 
