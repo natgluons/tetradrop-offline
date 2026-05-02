@@ -7,7 +7,7 @@ Offline PWA games collection that works without internet. All games run directly
 | Game | Description |
 |------|-------------|
 | 🧱 **Tetra Drop** | Classic falling block puzzle game. Clear lines and get high score! |
-| 🦫 **Capy Cat** | Virtual pet simulator. Take care of your capybara - feed, pet and play! |
+| 🦫 **Capy Pet** | Virtual pet simulator. Take care of your capybara - feed, pet and play! |
 | 🔀 **Emoji Swap** | Logic puzzle game. Swap emojis to find the secret hidden order. |
 | 💧 **Water Sort** | Color sorting puzzle. Pour liquids between tubes to sort all colors. |
 
@@ -22,11 +22,13 @@ Offline PWA games collection that works without internet. All games run directly
 
 ## 🚀 How to Play
 
-Just open `index.html` in any modern browser.
+- **Web**: Clone the repository and launch index.html in your browser to start playing.
+- **PWA**: Add to home screen for native app experience
+- **Android**: Download APK from **releases page**
 
 ## 📱 Mobile Support
 
-All games are optimized for mobile touch controls. Add to home screen for best experience.
+All games are optimized for mobile touch controls. Works both as PWA and native Android app.
 
 ## 🛠️ Development
 
