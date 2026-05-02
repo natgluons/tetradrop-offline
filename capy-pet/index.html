@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capybara Pet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdf4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+        }
+
+        .game-container {
+            background-color: #d1fae5;
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .stat-bar {
+            width: 100%;
+            max-width: 120px;
+        }
+
+        .stat-label {
+            font-weight: bold;
+            color: #047857;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            background-color: #e2e8f0;
+            border-radius: 9999px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background-color: #10b981;
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .pet-area {
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .pet-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .poke-hand {
+            position: absolute;
+            height: 100px;
+            right: -200px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: right 0.2s ease-out;
+        }
+
+        .poke-active {
+            animation: poke-anim 0.4s ease-in-out;
+        }
+
+        @keyframes poke-anim {
+            0% { right: -200px; }
+            50% { right: 40%; }
+            100% { right: -200px; }
+        }
+
+        .animate-float {
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .action-button {
+            background-color: #10b981;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .action-button img {
+            width: 48px;
+            height: 48px;
+            fill: currentColor;
+        }
+
+        .action-button:hover {
+            background-color: #047857;
+            transform: translateY(-2px);
+        }
+
+        .action-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 640px) {
+            .game-container {
+                padding: 1rem;
+            }
+            .title {
+                font-size: 2rem;
+            }
+            .pet-area {
+                height: 250px;
+            }
+            .action-button {
+                padding: 0.75rem 1.5rem;
+            }
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .stat-bar {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1 class="title">My Capybara Pet</h1>
+
+        <div class="stats-container">
+            <div class="stat-bar">
+                <div class="stat-label">Happiness</div>
+                <div class="progress-bar">
+                    <div id="happiness-bar" class="progress-fill" style="width: 50%;"></div>
+                </div>
+            </div>
+            <div class="stat-bar">
+                <div class="stat-label">Hunger</div>
+                <div class="progress-bar">
+                    <div id="hunger-bar" class="progress-fill" style="width: 50%;"></div>
+                </div>
+            </div>
+            <div class="stat-bar">
+                <div class="stat-label">Cleanliness</div>
+                <div class="progress-bar">
+                    <div id="cleanliness-bar" class="progress-fill" style="width: 50%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pet-area">
+            <img id="pet-image" src="" alt="Capybara" class="pet-image">
+            <img id="poke-hand" src="" alt="Poke Hand" class="poke-hand">
+        </div>
+
+        <div class="button-container">
+            <button class="action-button" data-action="sleep">
+                <img src="./images/sleep.png" alt="Sleep Icon">
+                <span>Sleep</span>
+            </button>
+            <button class="action-button" data-action="eat">
+                <img src="./images/food.png" alt="Food Icon">
+                <span>Feed</span>
+            </button>
+            <button class="action-button" data-action="drink">
+                <img src="./images/boba.png" alt="Boba Icon">
+                <span>Boba</span>
+            </button>
+            <button class="action-button" data-action="bath">
+                <img src="./images/soap.png" alt="Soap Icon">
+                <span>Bathe</span>
+            </button>
+            <button class="action-button" data-action="confused">
+                <img src="./images/bread.png" alt="Bread Icon">
+                <span>Confuse</span>
+            </button>
+            <button class="action-button" data-action="poke">
+                <img src="./images/poke.png" alt="Poke Icon">
+                <span>Poke</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const petImage = document.getElementById('pet-image');
+            const pokeHand = document.getElementById('poke-hand');
+            const happinessBar = document.getElementById('happiness-bar');
+            const hungerBar = document.getElementById('hunger-bar');
+            const cleanlinessBar = document.getElementById('cleanliness-bar');
+            const buttons = document.querySelectorAll('.action-button');
+
+            // --- USER IMAGES ---
+            // The file paths are now relative to the index.html file.
+            // Ensure your images folder is in the same directory as index.html.
+            const images = {
+                // `sleep` is the base image. Name: sleep.png
+                sleep: './images/sleep.png',
+                // `eat` is the feeding image. Name: eating.png
+                eat: './images/eat.png',
+                // `drink` is the happy drinking boba image. Name: drink.png
+                drink: './images/drink.png',
+                // `bath` is the taking a bath image. Name: bath.png
+                bath: './images/bath.png',
+                // `confused` is the wearing a bread hat image. Name: confused.png
+                confused: './images/confused.png',
+                // `angry` is the holding a knife image. Name: angry.png
+                angry: './images/angry.png',
+                // `pokeHand` is the hand for the animation. Name: poke.png
+                pokeHand: './images/poke.png',
+            };
+
+            let stats = {
+                happiness: 50,
+                hunger: 50,
+                cleanliness: 50
+            };
+            let activityTimer;
+            const INACTIVITY_TIME = 60000;
+            let pokeCount = 0;
+            let lastAction = '';
+
+            const updateStatsUI = () => {
+                happinessBar.style.width = `${stats.happiness}%`;
+                hungerBar.style.width = `${stats.hunger}%`;
+                cleanlinessBar.style.width = `${stats.cleanliness}%`;
+            };
+
+            const changeToSleep = () => {
+                petImage.src = images.sleep;
+                petImage.classList.remove('animate-float');
+            };
+
+            const updateCapybaraState = (action) => {
+                clearTimeout(activityTimer);
+                activityTimer = setTimeout(changeToSleep, INACTIVITY_TIME);
+
+                if (action !== 'sleep' && action !== 'poke') {
+                    petImage.src = images[action];
+                    petImage.classList.add('animate-float');
+                } else if (action === 'sleep') {
+                    petImage.src = images[action];
+                    petImage.classList.remove('animate-float');
+                }
+            };
+
+            const handleAction = (action) => {
+                // Reset poke count if a different action is performed
+                if (action !== 'poke') {
+                    pokeCount = 0;
+                    lastAction = action;
+                }
+
+                switch (action) {
+                    case 'eat':
+                        stats.hunger = Math.min(100, stats.hunger + 30);
+                        stats.happiness = Math.min(100, stats.happiness + 10);
+                        break;
+                    case 'drink':
+                        stats.hunger = Math.max(0, stats.hunger + 10);
+                        stats.happiness = Math.min(100, stats.happiness + 20);
+                        break;
+                    case 'bath':
+                        stats.cleanliness = Math.min(100, stats.cleanliness + 40);
+                        stats.happiness = Math.min(100, stats.happiness + 20);
+                        break;
+                    case 'confused':
+                        stats.happiness = Math.min(100, stats.happiness + 5);
+                        break;
+                    case 'sleep':
+                        stats.happiness = Math.min(100, stats.happiness + 10);
+                        break;
+                    case 'poke':
+                        pokeCount++;
+                        petImage.src = images.confused;
+                        petImage.classList.add('animate-float');
+                        pokeHand.src = './images/poke.png';
+                        pokeHand.classList.add('poke-active');
+                        pokeHand.addEventListener('animationend', () => {
+                            pokeHand.classList.remove('poke-active');
+                            pokeHand.src = '';
+                        }, { once: true });
+
+                        if (pokeCount >= 3) {
+                            stats.happiness = Math.max(0, stats.happiness - 25);
+                            petImage.src = images.angry;
+                            petImage.classList.remove('animate-float');
+                            pokeCount = 0;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                updateCapybaraState(action);
+                updateStatsUI();
+            };
+
+            buttons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const action = event.target.closest('button').dataset.action;
+                    handleAction(action);
+                });
+            });
+
+            setInterval(() => {
+                stats.happiness = Math.max(0, stats.happiness - 1);
+                stats.hunger = Math.max(0, stats.hunger - 1);
+                stats.cleanliness = Math.max(0, stats.cleanliness - 1);
+                updateStatsUI();
+            }, 3000);
+
+            changeToSleep();
+            updateStatsUI();
+        });
+    </script>
+
+</body>
+</html>

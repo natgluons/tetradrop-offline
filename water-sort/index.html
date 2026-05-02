@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Sort Puzzle</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .description {
+            color: #a0aec0;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .game-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            padding: 2rem;
+        }
+
+        .tube {
+            width: 70px;
+            height: 280px;
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            border-top: 4px solid transparent;
+            border-radius: 0 0 35px 35px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column-reverse;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tube::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .tube:hover {
+            transform: translateY(-5px);
+        }
+
+        .tube.selected {
+            transform: translateY(-15px);
+            border-color: #00FF00;
+            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.3);
+        }
+
+        .color-layer {
+            width: 100%;
+            height: 25%;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .win-message {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00FF00;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .home-link {
+            margin-top: 2rem;
+            color: #a0aec0;
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            color: white;
+        }
+
+        @media (max-width: 640px) {
+            .tube {
+                width: 55px;
+                height: 220px;
+                border-radius: 0 0 27.5px 27.5px;
+            }
+            .game-container {
+                gap: 1rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💧 Water Sort Puzzle</h1>
+        <p class="description">Click tubes to select and pour. Sort all colors into separate tubes!</p>
+
+        <div class="stats">
+            <div class="stat">Moves: <span id="moves">0</span></div>
+        </div>
+
+        <div class="game-container" id="game-container"></div>
+
+        <div id="win-message" class="win-message" style="display: none;">🎉 Perfect! You solved the puzzle!</div>
+
+        <div class="buttons">
+            <button onclick="restartGame()">🔄 New Game</button>
+            <button onclick="undoMove()">↩️ Undo</button>
+        </div>
+
+        <br>
+        <a href="../index.html" class="home-link">← Back to Home</a>
+    </div>
+
+    <script>
+        const COLORS = [
+            '#FF0000', // Red
+            '#FFA500', // Orange
+            '#FFFF00', // Yellow
+            '#008000', // Green
+            '#0000FF', // Blue
+            '#b917ff'  // Indigo
+        ];
+
+        let tubes = [];
+        let selectedTube = null;
+        let moves = 0;
+        let history = [];
+        const TUBE_HEIGHT = 4;
+
+        function initGame() {
+            const numColors = 6;
+            const numTubes = numColors + 2;
+            
+            // Create color distribution
+            let colors = [];
+            for (let i = 0; i < numColors; i++) {
+                for (let j = 0; j < TUBE_HEIGHT; j++) {
+                    colors.push(COLORS[i]);
+                }
+            }
+
+            // Shuffle colors
+            colors = colors.sort(() => Math.random() - 0.5);
+
+            // Initialize tubes
+            tubes = [];
+            let colorIndex = 0;
+            for (let i = 0; i < numTubes; i++) {
+                if (i < numColors) {
+                    tubes.push([
+                        colors[colorIndex++],
+                        colors[colorIndex++],
+                        colors[colorIndex++],
+                        colors[colorIndex++]
+                    ]);
+                } else {
+                    tubes.push([]);
+                }
+            }
+
+            selectedTube = null;
+            moves = 0;
+            history = [];
+            document.getElementById('win-message').style.display = 'none';
+            renderTubes();
+            updateStats();
+        }
+
+        function renderTubes() {
+            const container = document.getElementById('game-container');
+            container.innerHTML = '';
+
+            tubes.forEach((tube, index) => {
+                const tubeEl = document.createElement('div');
+                tubeEl.className = 'tube';
+                if (selectedTube === index) {
+                    tubeEl.classList.add('selected');
+                }
+
+                // Add color layers
+                tube.forEach(color => {
+                    const layer = document.createElement('div');
+                    layer.className = 'color-layer';
+                    layer.style.backgroundColor = color;
+                    tubeEl.appendChild(layer);
+                });
+
+                tubeEl.onclick = () => handleTubeClick(index);
+                container.appendChild(tubeEl);
+            });
+        }
+
+        function handleTubeClick(index) {
+            if (document.getElementById('win-message').style.display !== 'none') return;
+
+            if (selectedTube === null) {
+                if (tubes[index].length > 0) {
+                    selectedTube = index;
+                }
+            } else if (selectedTube === index) {
+                selectedTube = null;
+            } else {
+                // Try to pour
+                if (canPour(selectedTube, index)) {
+                    history.push(JSON.parse(JSON.stringify(tubes)));
+                    pour(selectedTube, index);
+                    moves++;
+                    selectedTube = null;
+                    checkWin();
+                } else {
+                    // Select new tube if it has content
+                    if (tubes[index].length > 0) {
+                        selectedTube = index;
+                    } else {
+                        selectedTube = null;
+                    }
+                }
+            }
+
+            renderTubes();
+            updateStats();
+        }
+
+        function canPour(from, to) {
+            if (tubes[from].length === 0) return false;
+            if (tubes[to].length >= TUBE_HEIGHT) return false;
+            if (tubes[to].length === 0) return true;
+            return tubes[from][tubes[from].length - 1] === tubes[to][tubes[to].length - 1];
+        }
+
+        function pour(from, to) {
+            const color = tubes[from][tubes[from].length - 1];
+            
+            // Pour ALL connected matching colors at once
+            while (tubes[from].length > 0 && tubes[from][tubes[from].length - 1] === color && tubes[to].length < TUBE_HEIGHT) {
+                tubes[to].push(tubes[from].pop());
+            }
+        }
+
+        function undoMove() {
+            if (history.length > 0) {
+                tubes = history.pop();
+                moves = Math.max(0, moves - 1);
+                selectedTube = null;
+                renderTubes();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('moves').textContent = moves;
+        }
+
+        function checkWin() {
+            const won = tubes.every(tube => {
+                if (tube.length === 0) return true;
+                if (tube.length !== TUBE_HEIGHT) return false;
+                return tube.every(c => c === tube[0]);
+            });
+
+            if (won) {
+                document.getElementById('win-message').style.display = 'block';
+            }
+        }
+
+        function restartGame() {
+            initGame();
+        }
+
+        // Initialize game on load
+        initGame();
+    </script>
+</body>
+</html>

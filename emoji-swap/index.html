@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Swap Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .description {
+            color: #a0aec0;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .emoji-card {
+            height: 120px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 3px solid transparent;
+            user-select: none;
+        }
+
+        .emoji-card:hover {
+            transform: scale(1.05);
+        }
+
+        .emoji-card.selected {
+            border-color: #00FF00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .win-message {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00FF00;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .home-link {
+            margin-top: 2rem;
+            color: #a0aec0;
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔀 Emoji Swap Game</h1>
+        <p class="description">Click emojis to select and swap them. Get all 4 in the correct hidden order!</p>
+
+        <div class="stats">
+            <div class="stat">Correct: <span id="correct-count">0</span>/4</div>
+            <div class="stat">Attempts: <span id="attempts">0</span></div>
+        </div>
+
+        <div class="game-grid" id="game-grid"></div>
+
+        <div id="win-message" class="win-message" style="display: none;"></div>
+
+        <button onclick="restartGame()">🔄 Restart Game</button>
+
+        <br>
+        <a href="../index.html" class="home-link">← Back to Home</a>
+    </div>
+
+    <script>
+        const EMOJIS = ['❤️', '💀', '🤖', '👽'];
+        const EMOJI_COLORS = {
+            '❤️': "#FFCDD2",
+            '💀': "#FFF9C4",
+            '🤖': "#BBDEFB",
+            '👽': "#C8E6C9"
+        };
+
+        let correctOrder = [];
+        let currentOrder = [];
+        let selected = [];
+        let attempts = 0;
+
+        function initGame() {
+            correctOrder = [...EMOJIS].sort(() => Math.random() - 0.5);
+            currentOrder = [...EMOJIS].sort(() => Math.random() - 0.5);
+            selected = [];
+            attempts = 0;
+            document.getElementById('win-message').style.display = 'none';
+            renderGrid();
+            updateStats();
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('game-grid');
+            grid.innerHTML = '';
+
+            currentOrder.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.className = 'emoji-card';
+                if (selected.includes(index)) {
+                    card.classList.add('selected');
+                }
+                card.style.backgroundColor = EMOJI_COLORS[emoji];
+                card.textContent = emoji;
+                card.onclick = () => handleClick(index);
+                grid.appendChild(card);
+            });
+        }
+
+        function handleClick(index) {
+            if (document.getElementById('win-message').style.display !== 'none') return;
+
+            if (selected.includes(index)) {
+                selected = selected.filter(i => i !== index);
+            } else {
+                selected.push(index);
+            }
+
+            if (selected.length === 2) {
+                const [i1, i2] = selected;
+                [currentOrder[i1], currentOrder[i2]] = [currentOrder[i2], currentOrder[i1]];
+                attempts++;
+                selected = [];
+                checkWin();
+            }
+
+            renderGrid();
+            updateStats();
+        }
+
+        function updateStats() {
+            let correctCount = 0;
+            for (let i = 0; i < 4; i++) {
+                if (currentOrder[i] === correctOrder[i]) {
+                    correctCount++;
+                }
+            }
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('attempts').textContent = attempts;
+        }
+
+        function checkWin() {
+            let correctCount = 0;
+            for (let i = 0; i < 4; i++) {
+                if (currentOrder[i] === correctOrder[i]) {
+                    correctCount++;
+                }
+            }
+
+            if (correctCount === 4) {
+                document.getElementById('win-message').textContent = `🎉 Congratulations! You solved it in ${attempts} swaps!`;
+                document.getElementById('win-message').style.display = 'block';
+            }
+        }
+
+        function restartGame() {
+            initGame();
+        }
+
+        // Initialize game on load
+        initGame();
+    </script>
+</body>
+</html>
