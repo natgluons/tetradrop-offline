@@ -80,8 +80,9 @@
         }
 
         .game-icon {
-            font-size: 4rem;
-            margin-bottom: 0.5rem;
+            width: 4rem;
+            height: 4rem;
+            object-fit: contain;
         }
 
         .game-title {
@@ -107,7 +108,7 @@
             }
 
             .games-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -127,32 +128,32 @@
 
         <div class="games-grid">
             <a href="tetra-drop/index.html" class="game-card">
-                <div class="game-icon">🧱</div>
+                <img src="assets/icon-tetradrop.png" alt="Tetra Drop" class="game-icon">
                 <div class="game-title">Tetra Drop</div>
                 <div class="game-description">Classic falling block puzzle game. Clear lines and get high score!</div>
             </a>
 
             <a href="capy-pet/index.html" class="game-card">
-                <div class="game-icon">🦫</div>
+                <img src="assets/icon-capypet.png" alt="Capy Pet" class="game-icon">
                 <div class="game-title">Capy Pet</div>
                 <div class="game-description">Take care of your virtual capybara pet. Feed, pet and play!</div>
             </a>
 
             <a href="emoji-swap/index.html" class="game-card">
-                <div class="game-icon">🔀</div>
+                <img src="assets/icon-emojiswap.png" alt="Emoji Swap" class="game-icon">
                 <div class="game-title">Emoji Swap</div>
                 <div class="game-description">Swap emojis to find the secret hidden order in this logic puzzle!</div>
             </a>
 
             <a href="water-sort/index.html" class="game-card">
-                <div class="game-icon">💧</div>
+                <img src="assets/icon-watersort.png" alt="Water Sort" class="game-icon">
                 <div class="game-title">Water Sort</div>
                 <div class="game-description">Color sorting puzzle game. Pour liquids between tubes to sort all colors!</div>
             </a>
         </div>
 
         <div class="footer">
-            Offline Simple Games Collection • Works without internet
+            Offline PWA Games Collection • Works without internet
         </div>
     </div>
 </body>
