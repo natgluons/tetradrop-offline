@@ -20,33 +20,34 @@
 
         .game-container {
             background-color: #d1fae5;
-            border-radius: 2rem;
-            padding: 2rem;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
-            max-width: 500px;
+            max-width: 420px;
             width: 100%;
             position: relative;
             overflow: hidden;
         }
 
         .title {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
             color: #10b981;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .stats-container {
             display: flex;
-            justify-content: space-around;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            flex-wrap: nowrap;
+            gap: 0.75rem;
         }
 
         .stat-bar {
-            width: 100%;
+            flex: 1 1 0;
+            min-width: 90px;
             max-width: 120px;
         }
 
@@ -70,17 +71,17 @@
         }
 
         .pet-area {
-            height: 300px;
+            height: 240px;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             position: relative;
         }
 
         .pet-image {
             width: 100%;
-            max-width: 300px;
+            max-width: 220px;
             height: auto;
             object-fit: contain;
             transition: transform 0.2s ease-in-out;
@@ -119,14 +120,14 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .action-button {
             background-color: #10b981;
             color: white;
-            padding: 1rem 2rem;
-            border-radius: 1rem;
+            padding: 0.85rem 1.5rem;
+            border-radius: 0.9rem;
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.1s ease;
@@ -135,7 +136,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
         
         .action-button img {
@@ -159,21 +160,22 @@
                 padding: 1rem;
             }
             .title {
-                font-size: 2rem;
+                font-size: 1.75rem;
             }
             .pet-area {
-                height: 250px;
+                height: 220px;
             }
             .action-button {
-                padding: 0.75rem 1.5rem;
+                padding: 0.75rem 1.25rem;
             }
             .stats-container {
-                flex-direction: column;
-                align-items: center;
+                flex-wrap: wrap;
+                justify-content: center;
                 gap: 0.5rem;
             }
             .stat-bar {
-                max-width: 100%;
+                min-width: 100px;
+                max-width: 140px;
             }
         }
     </style>
