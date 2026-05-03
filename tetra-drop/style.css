@@ -27,10 +27,10 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 500px;
+    max-width: 900px;
     min-height: 100dvh;
     max-height: 100dvh;
-    padding: 5px 5px 16px;
+    padding: 10px 12px 20px;
 }
 
 /* Top Bar */
