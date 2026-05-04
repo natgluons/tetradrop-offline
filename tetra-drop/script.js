@@ -913,27 +913,25 @@ document.addEventListener('keydown', (event) => {
         case 68: // D key
             playerMove(1);
             break;
-        case 40: // Down arrow
-        case 83: // S key
+        case 32: // Space (drop)
+            event.preventDefault();
             playerDrop();
             gameState.score += 1;
             updateScore();
             break;
         case 38: // Up arrow (rotate)
         case 87: // W key (rotate)
-        case 32: // Space (rotate)
         case 13: // Enter (rotate)
             playerRotate(1);
             break;
         case 17: // Ctrl (hard drop)
-        case 16: // Shift (hard drop)
         case 27: // Escape (hard drop)
             event.preventDefault();
             playerHardDrop();
             updateScore();
             break;
-        case 67: // C key (hold)
         case 16: // Shift key (hold)
+            event.preventDefault();
             playerHold();
             break;
         case 80: // P key (pause)
